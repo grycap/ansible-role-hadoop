@@ -1,0 +1,26 @@
+galaxy_info:
+  author: Miguel Caballer
+  description: Install a Hadoop Cluster
+  company: GRyCAP
+  license: Apache
+  min_ansible_version: 1.8
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7  
+  - name: Ubuntu
+    versions:
+    - precise
+    - quantal
+    - raring
+    - saucy
+    - trusty
+  - name: Debian
+    versions:
+    - squeeze
+    - wheezy
+  galaxy_tags:
+    - hadoop
+    - web
+dependencies: []

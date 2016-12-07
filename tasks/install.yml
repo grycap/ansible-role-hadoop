@@ -1,0 +1,40 @@
+---
+# RedHat related OSs
+- name: Yum install {{ item }}
+  action: yum pkg={{ item }} state=installed
+  when: "ansible_os_family == 'RedHat'"
+  with_items:
+  - wget
+  - tar
+  - gzip
+  - java-1.7.0-openjdk
+
+# Debian related OSs
+- name: Apt install {{ item }}
+  action: apt pkg={{ item }} state=installed update_cache=yes cache_valid_time=604800
+  when: "ansible_os_family == 'Debian'"
+  with_items:
+  - wget
+  - tar
+  - gzip
+  - openjdk-7-jre-headless
+  #- openjdk-7-jdk
+
+
+- get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar.gz dest=/opt/hadoop-{{ hadoop_version }}.tar.gz force=no
+  register: result
+  until: result|success
+  retries: 5
+  delay: 2
+
+- unarchive: src=/opt/hadoop-{{ hadoop_version }}.tar.gz dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
+
+- file: dest={{ hadoop_home }} src=/opt/hadoop-{{ hadoop_version }} state=link
+
+- file: dest=/opt/hadoop src={{ hadoop_home }} state=link
+
+- lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64"
+  when: "ansible_os_family == 'Debian'"
+
+- lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-1.7.0"
+  when: "ansible_os_family == 'RedHat'"
