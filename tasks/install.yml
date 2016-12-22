@@ -17,9 +17,7 @@
   - wget
   - tar
   - gzip
-  - openjdk-7-jre-headless
-  #- openjdk-7-jdk
-
+  - default-jre-headless
 
 - get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar.gz dest=/opt/hadoop-{{ hadoop_version }}.tar.gz force=no
   register: result
