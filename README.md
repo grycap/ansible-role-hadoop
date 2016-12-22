@@ -19,7 +19,6 @@ The variables that can be passed to this role and a brief description about them
 	hadoop_mirrors: [ "http://mirror.cc.columbia.edu/pub/software/apache/hadoop/core/stable2/",
 			"http://ftp.osuosl.org/pub/apache/hadoop/core/stable2/",
 			"http://apache.rediris.es/hadoop/core/stable2/",
-			"http://ftp.cixug.es/apache/hadoop/core/stable2/",
 			"http://www-eu.apache.org/dist/hadoop/common/stable2/" ]
 	# Hadoop version to install
 	hadoop_version: 2.7.3
