@@ -22,7 +22,7 @@ The variables that can be passed to this role and a brief description about them
 			"http://ftp.cixug.es/apache/hadoop/core/stable2/",
 			"http://www-eu.apache.org/dist/hadoop/common/stable2/" ]
 	# Hadoop version to install
-	hadoop_version: 2.7.2
+	hadoop_version: 2.7.3
 	# A dictionary with a set of properties to set in the core-site.xml
 	hdfs_props: {}
 	# A dictionary with a set of properties to set in the yarn-site.xml
