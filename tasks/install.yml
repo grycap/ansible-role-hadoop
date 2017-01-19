@@ -7,6 +7,7 @@
   - wget
   - tar
   - gzip
+  - unzip
   - java-1.7.0-openjdk
 
 # Debian related OSs
@@ -17,6 +18,7 @@
   - wget
   - tar
   - gzip
+  - unzip
   - default-jre-headless
 
 - get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar.gz dest=/opt/hadoop-{{ hadoop_version }}.tar.gz force=no
