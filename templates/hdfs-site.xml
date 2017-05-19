@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<configuration>
+{% for key, value in hdfs_props.iteritems() %}
+	<property>
+		<name>{{ key }}</name>
+		<value>{{ value }}</value>
+	</property>
+{% endfor %}
+</configuration>
