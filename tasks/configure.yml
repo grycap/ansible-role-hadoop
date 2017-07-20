@@ -6,6 +6,13 @@
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
+- template: src=hdfs-site.xml dest="{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" owner=root group=root
+  notify:
+   - restart hadoop-dfs
+   - restart yarn-resourcemanager
+   - restart hadoop-datanode
+   - restart yarn-nodemanager
+
 - template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/core-site.xml" owner=root group=root
   notify:
    - restart hadoop-dfs
