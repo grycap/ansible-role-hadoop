@@ -8,7 +8,16 @@
   - tar
   - gzip
   - unzip
-  - java-1.7.0-openjdk
+  - java-1.8.0-openjdk
+
+
+- name: Ubuntu 14 install software-properties-common
+  apt: name=software-properties-common
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
+
+- name: Ubuntu 14 install OpenJDK PPA repo
+  apt_repository: repo='ppa:openjdk-r/ppa'
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
 
 # Debian related OSs
 - name: Apt install {{ item }}
@@ -19,7 +28,7 @@
   - tar
   - gzip
   - unzip
-  - default-jre-headless
+  - openjdk-8-jre
 
 - get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar.gz dest=/opt/hadoop-{{ hadoop_version }}.tar.gz force=no
   register: result
@@ -36,5 +45,5 @@
 - lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME={{item}}"
   with_first_found:
    - /usr/lib/jvm/java-8-openjdk-amd64
-   - /usr/lib/jvm/java-7-openjdk-amd64
-   - /usr/lib/jvm/jre-1.7.0
+   - /usr/lib/jvm/jre-1.8.0
+
