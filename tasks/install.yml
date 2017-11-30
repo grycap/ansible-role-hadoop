@@ -30,9 +30,9 @@
   - unzip
   - openjdk-8-jre
 
-- set_fact: hadoop_file="{{ lookup('url', hadoop_mirrors|random, split_lines=False) | regex_search('(hadoop-)([\d.]+)(-src\.tar\.gz)') }}"
+- set_fact: hadoop_file="{{ lookup('url', hadoop_mirrors|random, split_lines=False) | regex_search('(hadoop-)(\d\.\d\.\d)(\.tar\.gz)') }}"
   when: hadoop_version == 'latest'
-- set_fact: hadoop_version="{{ hadoop_file | regex_search('([\d.]+)') }}"
+- set_fact: hadoop_version="{{ hadoop_file | regex_search('(\d\.\d\.\d)') }}"
   when: hadoop_version == 'latest'
 
 - debug: msg="Installing {{ hadoop_version }}"
