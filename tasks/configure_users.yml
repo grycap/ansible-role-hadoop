@@ -3,16 +3,16 @@
   command: /opt/hadoop/bin/hdfs dfs -mkdir -p /users/
 
 - name: HDFS configuration (create log dir)
-   command: /opt/hadoop/bin/hdfs dfs -mkdir -p /log/
+  command: /opt/hadoop/bin/hdfs dfs -mkdir -p /log/
 
 - name: HDFS configuration (create history dir)
-   command: /opt/hadoop/bin/hdfs dfs -mkdir -p /log/history
+  command: /opt/hadoop/bin/hdfs dfs -mkdir -p /log/history
 
 - name: HDFS configuration (set log folder rights)
-   command: /opt/hadoop/bin/hdfs dfs -chmod go+w /log
+  command: /opt/hadoop/bin/hdfs dfs -chmod go+w /log
 
 - name: HDFS configuration (set history folder rights)
-   command: /opt/hadoop/bin/hdfs dfs -chmod go+w /log/history
+  command: /opt/hadoop/bin/hdfs dfs -chmod go+w /log/history
 
 - name: Copy hadoop environment script
   copy: 
