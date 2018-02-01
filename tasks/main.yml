@@ -9,4 +9,4 @@
 - include: configure.yml
 
 - include: configure_users.yml
-  when: users_dict is defined
+  when: false in users_dict.values()
