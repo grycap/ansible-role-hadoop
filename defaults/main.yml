@@ -10,3 +10,5 @@ hadoop_version: latest
 hdfs_props: {}
 # A dictionary with a set of properties to set in the yarn-site.xml
 yarn_props: {}
+# A dictionary with a set of users to configure hdfs
+users_dict: {}
