@@ -7,3 +7,6 @@
   when: not hadoop_installed.stat.exists
 
 - include: configure.yml
+
+- include: configure_users.yml
+  when: users_dict is defined
