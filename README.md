@@ -26,6 +26,8 @@ The variables that can be passed to this role and a brief description about them
 	hdfs_props: {}
 	# A dictionary with a set of properties to set in the yarn-site.xml
 	yarn_props: {}
+	# List of slave nodes
+	hadoop_slave_nodes: "{{ groups['all']|map('extract', hostvars,'ansible_hostname')|list }}"
 
 Example Playbook
 ----------------

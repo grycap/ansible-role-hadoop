@@ -12,3 +12,5 @@ hdfs_props: {}
 yarn_props: {}
 # A dictionary with a set of users to configure hdfs
 users_dict: {}
+# List of slave nodes
+hadoop_slave_nodes: "{{ groups['all']|map('extract', hostvars,'ansible_hostname')|list }}"
