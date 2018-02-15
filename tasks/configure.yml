@@ -32,7 +32,7 @@
    - restart yarn-nodemanager
 
 - name: Set data node dir from hdfs_props
-  set_fact: data_node_data_dir={{ hdfs_props['dfs.datanode.data.dir'] }}
+  set_fact: data_node_data_dir={{ hdfs_props['dfs.datanode.data.dir'][7:] }}
   when: hdfs_props['dfs.datanode.data.dir'] is defined
 
 - name: Set default data node dir
