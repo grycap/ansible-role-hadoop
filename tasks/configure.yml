@@ -1,36 +1,50 @@
 ---
-- template: src=yarn-site.xml dest="{{ hadoop_home }}/etc/hadoop/yarn-site.xml" owner=root group=root
+- name: Create file yarn-site.xml
+  template: src=yarn-site.xml dest="{{ hadoop_home }}/etc/hadoop/yarn-site.xml" owner=root group=root
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- template: src=hdfs-site.xml dest="{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" owner=root group=root
+- name: Create file hdfs-site.xml
+  template: src=hdfs-site.xml dest="{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" owner=root group=root
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/core-site.xml" owner=root group=root
+- name: Create file core-site.xml
+  template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/core-site.xml" owner=root group=root
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- template: src=slaves dest="{{ hadoop_home }}/etc/hadoop/slaves" owner=root group=root
+- name: Create file slaves
+  template: src=slaves dest="{{ hadoop_home }}/etc/hadoop/slaves" owner=root group=root
   notify:
    - refreshDFSNodes
    - refreshYarnNodes
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- command: "{{ hadoop_home }}/bin/hdfs namenode -format creates=/tmp/hadoop-root/dfs/name"
+- name: Set data node dir from hdfs_props
+  set_fact: data_node_data_dir={{ hdfs_props['dfs.datanode.data.dir'] }}
+  when: hdfs_props['dfs.datanode.data.dir'] is defined
+
+- name: Set default data node dir
+  set_fact: data_node_data_dir==/tmp/hadoop-root/dfs
+  when: hdfs_props['dfs.datanode.data.dir'] is undefined
+
+- name: Format namenode data dir
+  command: "{{ hadoop_home }}/bin/hdfs namenode -format creates={{data_node_data_dir}}"
   when: (hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')
 
-- iptables: chain=INPUT jump=ACCEPT protocol=tcp destination_port={{item}}
+- name: Open external ports
+  iptables: chain=INPUT jump=ACCEPT protocol=tcp destination_port={{item}}
   ignore_errors: yes
   with_items:
   - 8088
