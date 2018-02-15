@@ -4,4 +4,5 @@
     - role: role_under_test
       hdfs_props:
         dfs.datanode.data.dir: file:///opt/dfs/data
+        dfs.namenode.name.dir: file:///opt/dfs/name
 
