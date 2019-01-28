@@ -36,11 +36,13 @@
   when: hdfs_props['dfs.namenode.name.dir'] is defined
 
 - name: Set default data dir
-  set_fact: data_dir==/tmp/hadoop-root/dfs
+  set_fact: data_dir=/tmp/hadoop-root/dfs
   when: hdfs_props['dfs.namenode.name.dir'] is undefined
 
 - name: Format namenode data dir
-  command: "{{ hadoop_home }}/bin/hdfs namenode -format creates={{data_dir}}"
+  command: "{{ hadoop_home }}/bin/hdfs namenode -format"
+  args:
+    creates: "{{data_dir}}"
   when: (hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')
 
 - name: Open external ports
