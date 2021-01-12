@@ -12,7 +12,7 @@
     - java-1.8.0-openjdk
 
 - name: Ubuntu 14 install software-properties-common
-  apt: name=software-properties-common
+  apt: name=software-properties-common update_cache=yes cache_valid_time=3600
   when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
 
 - name: Ubuntu 14 install OpenJDK PPA repo
@@ -21,7 +21,7 @@
 
 # Debian related OSs
 - name: Apt install {{ packages }}
-  apt: pkg={{ packages }} state=present update_cache=yes cache_valid_time=604800
+  apt: pkg={{ packages }} state=present update_cache=yes cache_valid_time=3600
   when: "ansible_os_family == 'Debian'"
   vars:
     packages:
