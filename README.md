@@ -16,12 +16,12 @@ The variables that can be passed to this role and a brief description about them
 	# Hadoop base directory to install the software
 	hadoop_home: /opt/hadoop-2.X
 	# List of servers to download the hadoop code
-	hadoop_mirrors: [ "http://mirror.cc.columbia.edu/pub/software/apache/hadoop/core/stable2/",
-			"http://ftp.osuosl.org/pub/apache/hadoop/core/stable2/",
-			"http://apache.rediris.es/hadoop/core/stable2/",
-			"http://www-eu.apache.org/dist/hadoop/common/stable2/" ]
+	hadoop_mirrors: [ "http://mirror.cc.columbia.edu/pub/software/apache/hadoop/core/stable/",
+			"http://ftp.osuosl.org/pub/apache/hadoop/core/stable/",
+			"http://apache.rediris.es/hadoop/core/stable/",
+			"http://www-eu.apache.org/dist/hadoop/common/stable/" ]
 	# Hadoop version to install
-	hadoop_version: 2.7.3
+	hadoop_version: latest
 	# A dictionary with a set of properties to set in the core-site.xml
 	hdfs_props: {}
 	# A dictionary with a set of properties to set in the yarn-site.xml
