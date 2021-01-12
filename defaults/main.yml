@@ -1,9 +1,9 @@
 # The type of the node: slave / master / resourcemanager / nodemanager / datanode / namenode  
 hadoop_type_of_node: slave
 # Hadoop base directory to install the software
-hadoop_home: /opt/hadoop-2.X
+hadoop_home: /opt/hadoop-3.X
 # List of servers to download the hadoop code
-hadoop_mirrors: [ "http://ftpgrycap.i3m.upv.es/src/", "http://apache.rediris.es/hadoop/core/stable2/", "http://www-eu.apache.org/dist/hadoop/common/stable2/" ]
+hadoop_mirrors: [ "http://ftpgrycap.i3m.upv.es/src/", "http://apache.rediris.es/hadoop/core/stable/", "http://www-eu.apache.org/dist/hadoop/common/stable/" ]
 # Hadoop version to install: latest or version num
 hadoop_version: latest
 # A dictionary with a set of properties to set in the hdfs-site.xml

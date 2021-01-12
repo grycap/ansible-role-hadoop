@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  tasks:
+    - name: "Include grycap.hadoop"
+      include_role:
+        name: "ansible-role-hadoop"
+      vars:
+        hadoop_mirrors: [ "http://ftpgrycap.i3m.upv.es/src/" ]
+        hadoop_master: localhost
+        hdfs_props:
+          dfs.datanode.data.dir: file:///opt/dfs/data
+          dfs.namenode.name.dir: file:///opt/dfs/name
