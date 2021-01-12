@@ -2,8 +2,8 @@
 - name: Converge
   hosts: all
   become: true
-
   tasks:
+
     - name: "Include grycap.hadoop"
       include_role:
         name: "ansible-role-hadoop"

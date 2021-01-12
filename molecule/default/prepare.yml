@@ -1,0 +1,14 @@
+---
+- name: Prepare
+  hosts: all
+  become: false
+  gather_facts: false
+
+  pre_tasks:
+    - name: Bootstrap python Deb
+      raw: apt update && apt install -y sudo python
+      ignore_errors: yes
+
+    - name: Bootstrap python RH
+      raw: yum install -y sudo python2
+      ignore_errors: yes
