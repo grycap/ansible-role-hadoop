@@ -1,37 +1,42 @@
 ---
-# RedHat related OSs
-- name: Yum install {{ packages }}
-  yum: pkg={{ packages }} state=present
-  when: "ansible_os_family == 'RedHat'"
-  vars:
-    packages:
-    - wget
-    - tar
-    - gzip
-    - unzip
-    - java-1.8.0-openjdk
+- name: Apt update_cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  when: "ansible_os_family == 'Debian'" 
 
+# Debian related OSs
 - name: Ubuntu 14 install software-properties-common
-  apt: name=software-properties-common
+  apt: name=software-properties-common update_cache=yes cache_valid_time=3600
   when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
 
 - name: Ubuntu 14 install OpenJDK PPA repo
   apt_repository: repo='ppa:openjdk-r/ppa'
   when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
 
-# Debian related OSs
-- name: Apt install {{ packages }}
-  apt: pkg={{ packages }} state=present update_cache=yes cache_valid_time=604800
-  when: "ansible_os_family == 'Debian'"
-  vars:
-    packages:
-    - wget
-    - tar
-    - gzip
-    - unzip
-    - openjdk-8-jre
+- name: Apt install java
+  apt:
+    name: openjdk-8-jre
+    state: present
+  when: "ansible_os_family == 'Debian'" 
 
-- set_fact: hadoop_file="{{ lookup('url', 'http://www-eu.apache.org/dist/hadoop/common/stable2/', split_lines=False) | regex_search('(hadoop-)(\d+\.\d+\.\d+)(\.tar\.gz)') }}"
+# RedHat related OSs
+- name: Yum install java
+  yum: 
+    name: java-1.8.0-openjdk
+    state: present
+  when: "ansible_os_family == 'RedHat'"
+
+- name: Install requisites
+  package: 
+    name:
+      - wget
+      - tar
+      - gzip
+      - unzip
+    state: present
+
+- set_fact: hadoop_file="{{ lookup('url', 'http://www-eu.apache.org/dist/hadoop/common/stable/', split_lines=False) | regex_search('(hadoop-)(\d+\.\d+\.\d+)(\.tar\.gz)') }}"
   when: hadoop_version == 'latest'
 - set_fact: hadoop_version="{{ hadoop_file | regex_search('(\d+\.\d+\.\d+)') }}"
   when: hadoop_version == 'latest'
