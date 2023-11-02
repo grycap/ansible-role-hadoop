@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <configuration>
 	<property>
-		<name>fs.default.name</name>
+		<name>fs.defaultFS</name>
 		<value>hdfs://{{ hadoop_master }}:9000</value>
 	</property>
 {% for key, value in hdfs_props.items() %}
