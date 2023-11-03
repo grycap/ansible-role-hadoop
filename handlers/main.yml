@@ -5,7 +5,7 @@
   ignore_errors:  yes
 
 - name: start hadoop-dfs
-  action: shell {{ hadoop_home }}/bin/hdfs --daemon start namenode
+  action: shell nohup {{ hadoop_home }}/bin/hdfs --daemon start namenode &
   when: ( hadoop_type_of_node == 'master' ) or ( hadoop_type_of_node == 'namenode' )
   listen: "restart hadoop-dfs"
   
@@ -16,7 +16,7 @@
   ignore_errors:  yes
 
 - name: start yarn-resourcemanager
-  action: shell {{ hadoop_home }}/bin/yarn --daemon start resourcemanager
+  action: shell nohup {{ hadoop_home }}/bin/yarn --daemon start resourcemanager &
   when: ( hadoop_type_of_node == 'master' ) or ( hadoop_type_of_node == 'resourcemanager' )
   listen: "restart yarn-resourcemanager"
 
@@ -27,7 +27,7 @@
   ignore_errors:  yes
 
 - name: start hadoop-datanode
-  action: shell {{ hadoop_home }}/bin/hdfs --daemon start datanode
+  action: shell nohup {{ hadoop_home }}/bin/hdfs --daemon start datanode &
   when: ( hadoop_type_of_node == 'slave' ) or ( hadoop_type_of_node == 'datanode' )
   listen: "restart hadoop-datanode"
 
@@ -38,7 +38,7 @@
   ignore_errors:  yes
 
 - name: start yarn-nodemanager
-  action: shell {{ hadoop_home }}/bin/yarn --daemon start nodemanager
+  action: shell nohup {{ hadoop_home }}/bin/yarn --daemon start nodemanager &
   when: ( hadoop_type_of_node == 'slave' ) or ( hadoop_type_of_node == 'nodemanager' )
   listen: "restart yarn-nodemanager"
 
