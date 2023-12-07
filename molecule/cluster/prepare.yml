@@ -1,0 +1,16 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: true
+
+  pre_tasks:
+    - name: Update cache on Debian
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Create man dir
+      file:
+        path: /usr/share/man/man1
+        state: directory
+        recurse: yes
