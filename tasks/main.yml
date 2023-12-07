@@ -3,10 +3,10 @@
 - stat: path=/opt/hadoop
   register: hadoop_installed
 
-- include: install.yml
+- include_tasks: install.yml
   when: not hadoop_installed.stat.exists
 
-- include: configure.yml
+- include_tasks: configure.yml
 
-- include: configure_users.yml
+- include_tasks: configure_users.yml
   when: users_dict.values()
