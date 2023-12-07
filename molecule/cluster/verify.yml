@@ -1,0 +1,12 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Test
+      command: /opt/hadoop/bin/hdfs dfs -ls /
+      register: dfs_ls
+
+    - debug: msg={{ dfs_ls }}

@@ -1,0 +1,59 @@
+---
+scenario:
+  name: cluster
+dependency:
+  name: galaxy
+driver:
+  name: docker
+verifier:
+  name: ansible
+platforms:
+  - name: hadoopmaster
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos8}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - front
+    networks:
+      - name: "hadoop"
+    network_mode: "hadoop"
+    published_ports:
+      - 9000/tcp
+      - 8088/tcp
+      - 50030/tcp
+      - 8030/tcp
+      - 8031/tcp
+      - 8032/tcp
+  - name: vnode-1
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos8}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    groups:
+      - wn
+    networks:
+      - name: "hadoop"
+    network_mode: "hadoop"
+    published_ports:
+      - 8088/tcp
+      - 50030/tcp
+      - 8030/tcp
+      - 8031/tcp
+      - 8032/tcp
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+  inventory:
+    group_vars:
+      front:
+        hadoop_type_of_node: master
+      wn:
+        hadoop_type_of_node: slave
