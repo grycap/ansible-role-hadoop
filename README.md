@@ -19,7 +19,7 @@ The variables that can be passed to this role and a brief description about them
 	hadoop_mirrors: [ "http://mirror.cc.columbia.edu/pub/software/apache/hadoop/core/stable/",
 			"http://ftp.osuosl.org/pub/apache/hadoop/core/stable/",
 			"http://apache.rediris.es/hadoop/core/stable/",
-			"http://www-eu.apache.org/dist/hadoop/common/stable/" ]
+			"https://dlcdn.apache.org/hadoop/common/stable/" ]
 	# Hadoop version to install
 	hadoop_version: latest
 	# A dictionary with a set of properties to set in the core-site.xml
