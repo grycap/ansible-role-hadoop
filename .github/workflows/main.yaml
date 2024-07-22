@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         distro:
-          - rockylinux8
+          - centos8
           - rockylinux9
           - ubuntu2204
           - ubuntu2404
@@ -32,7 +32,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule-plugins[docker] docker
+        run: pip3 install ansible<=10 molecule-plugins[docker] docker
 
       - name: Run Molecule tests.
         run: molecule test --all
