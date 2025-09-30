@@ -16,14 +16,14 @@
 
 - name: Apt install java
   apt:
-    name: openjdk-8-jre
+    name: default-jre
     state: present
   when: "ansible_os_family == 'Debian'" 
 
 # RedHat related OSs
 - name: Yum install java
   yum: 
-    name: java-1.8.0-openjdk
+    name: java-11-openjdk
     state: present
   when: "ansible_os_family == 'RedHat'"
 
