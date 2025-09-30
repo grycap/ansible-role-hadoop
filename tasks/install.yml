@@ -43,15 +43,19 @@
     hadoop_version: "{{ hadoop_files | sort | last }}"
   when: hadoop_version == 'latest'
 
+# This seems to be a bug in Haddop 3.4.2, let's use .tar for versions > 3.4.1
+- set_fact:
+    hadoop_file_ext: "{{ 'tar' if hadoop_version is version('3.4.1', '>') else 'tar.gz' }}"
+
 - name: "Download {{ hadoop_version }}"
-  get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar dest=/opt/hadoop-{{ hadoop_version }}.tar force=no
+  get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.{{ hadoop_file_ext }} dest=/opt/hadoop-{{ hadoop_version }}.{{ hadoop_file_ext }} force=no
   register: result
   until: result is success
   retries: 5
   delay: 2
 
 - name: Unarchive hadoop tgz
-  unarchive: src=/opt/hadoop-{{ hadoop_version }}.tar dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
+  unarchive: src=/opt/hadoop-{{ hadoop_version }}.{{ hadoop_file_ext }} dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
 
 - name: "Create {{ hadoop_home }} dir"
   file: dest={{ hadoop_home }} src=/opt/hadoop-{{ hadoop_version }} state=link
