@@ -36,20 +36,22 @@
       - unzip
     state: present
 
-- set_fact: hadoop_file="{{ lookup('url', 'http://apache.rediris.es/hadoop/core/stable/', split_lines=False) | regex_search('(hadoop-)(\d+\.\d+\.\d+)(\.tar\.gz)') }}"
+- set_fact:
+    hadoop_files: '{{ lookup("url", "http://apache.rediris.es/hadoop/core/stable/", split_lines=False) | regex_findall("hadoop-(\d+\.\d+\.\d+)\.tar") }}'
   when: hadoop_version == 'latest'
-- set_fact: hadoop_version="{{ hadoop_file | regex_search('(\d+\.\d+\.\d+)') }}"
+- set_fact:
+    hadoop_version: "{{ hadoop_files | sort | last }}"
   when: hadoop_version == 'latest'
 
 - name: "Download {{ hadoop_version }}"
-  get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar.gz dest=/opt/hadoop-{{ hadoop_version }}.tar.gz force=no
+  get_url: url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar dest=/opt/hadoop-{{ hadoop_version }}.tar force=no
   register: result
   until: result is success
   retries: 5
   delay: 2
 
 - name: Unarchive hadoop tgz
-  unarchive: src=/opt/hadoop-{{ hadoop_version }}.tar.gz dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
+  unarchive: src=/opt/hadoop-{{ hadoop_version }}.tar dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
 
 - name: "Create {{ hadoop_home }} dir"
   file: dest={{ hadoop_home }} src=/opt/hadoop-{{ hadoop_version }} state=link
