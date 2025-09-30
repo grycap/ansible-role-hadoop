@@ -1,12 +1,19 @@
 ---
 - name: Converge
   hosts: all
-  become: true
+  gather_facts: false
+  vars: 
+    ansible_python_interpreter: /usr/bin/python
 
   tasks:
+    - name: Link python
+      raw: ls /usr/bin/python || { ls /usr/bin/python2 && ln -s /usr/bin/python2 /usr/bin/python; } || { ls /usr/bin/python3 && ln -s /usr/bin/python3 /usr/bin/python; }
+      changed_when: false
+
+    - setup: 
 
     - name: "Include grycap.hadoop"
       include_role:
-        name: "ansible-role-hadoop"
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
       vars:
         hadoop_master: "hadoopmaster"
