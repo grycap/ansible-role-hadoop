@@ -64,7 +64,7 @@
   file: dest=/opt/hadoop src={{ hadoop_home }} state=link
 
 - name: Set JAVA_HOME in hadoop-env.sh in RH
-  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-1.11.0"
+  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-11"
   when: "ansible_os_family == 'RedHat'"
 
 - name: Set JAVA_HOME in hadoop-env.sh Deb
