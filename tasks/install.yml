@@ -16,7 +16,7 @@
 
 - name: Apt install java
   apt:
-    name: openjdk-11-jre
+    name: default-jre
     state: present
   when: "ansible_os_family == 'Debian'" 
 
@@ -67,6 +67,14 @@
   lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-11"
   when: "ansible_os_family == 'RedHat'"
 
+- name: Search for java installation
+  find:
+    paths: /usr/lib/jvm
+    patterns: "java-*-openjdk-amd64"
+    file_type: directory
+  register: java_found
+  when: "ansible_os_family == 'Debian'"
+
 - name: Set JAVA_HOME in hadoop-env.sh Deb
-  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME={{ java_found.files[0].path if java_found.matched > 0 else '/usr/lib/jvm/default-java' }}"
   when: "ansible_os_family == 'Debian'"
