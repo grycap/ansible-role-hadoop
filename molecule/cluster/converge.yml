@@ -15,6 +15,6 @@
 
     - name: "Include grycap.hadoop"
       include_role:
-        name: "ansible-role-hadoop"
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
       vars:
         hadoop_master: "hadoopmaster"
