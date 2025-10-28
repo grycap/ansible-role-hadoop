@@ -19,6 +19,7 @@ jobs:
         distro:
           - centos8
           - rockylinux9
+          - rockylinux10
           - ubuntu2204
           - ubuntu2404
 

@@ -21,11 +21,17 @@
   when: "ansible_os_family == 'Debian'" 
 
 # RedHat related OSs
-- name: Yum install java
+- name: Yum install java in RHEL < 10
   yum: 
     name: java-11-openjdk
     state: present
-  when: "ansible_os_family == 'RedHat'"
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version | int < 10"
+
+- name: Yum install java in RHEL >= 10
+  yum:
+    name: java-21-openjdk
+    state: present
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version | int >= 10"
 
 - name: Install requisites
   package: 
@@ -63,7 +69,7 @@
   file: dest=/opt/hadoop src={{ hadoop_home }} state=link
 
 - name: Set JAVA_HOME in hadoop-env.sh in RH
-  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-11"
+  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre"
   when: "ansible_os_family == 'RedHat'"
 
 - name: Search for java installation
