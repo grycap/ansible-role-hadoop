@@ -21,11 +21,17 @@
   when: "ansible_os_family == 'Debian'" 
 
 # RedHat related OSs
-- name: Yum install java
+- name: Yum install java in RHEL < 10
   yum: 
     name: java-11-openjdk
     state: present
-  when: "ansible_os_family == 'RedHat'"
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version | int < 10"
+
+- name: Yum install java in RHEL >= 10
+  yum:
+    name: java-21-openjdk
+    state: present
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version | int >= 10"
 
 - name: Install requisites
   package: 
