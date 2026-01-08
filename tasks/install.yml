@@ -59,6 +59,14 @@
   retries: 5
   delay: 2
 
+- name: "Download {{ hadoop_version }} from archive as fallback for old versions"
+  get_url: url=https://archive.apache.org/dist/hadoop/core/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}.{{ hadoop_file_ext }} dest=/opt/hadoop-{{ hadoop_version }}.{{ hadoop_file_ext }} force=no
+  register: fallback_result
+  until: fallback_result is success
+  retries: 2
+  delay: 2
+  when: result is failed
+
 - name: Unarchive hadoop tgz
   unarchive: src=/opt/hadoop-{{ hadoop_version }}.{{ hadoop_file_ext }} dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
 
