@@ -5,33 +5,18 @@
     cache_valid_time: 3600
   when: "ansible_os_family == 'Debian'" 
 
-# Debian related OSs
-- name: Ubuntu 14 install software-properties-common
-  apt: name=software-properties-common update_cache=yes cache_valid_time=3600
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
-
-- name: Ubuntu 14 install OpenJDK PPA repo
-  apt_repository: repo='ppa:openjdk-r/ppa'
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
-
 - name: Apt install java
   apt:
-    name: default-jre
+    name: "{{ hadoop_java_package_debian }}"
     state: present
-  when: "ansible_os_family == 'Debian'" 
+  when: "ansible_os_family == 'Debian'"
 
 # RedHat related OSs
-- name: Yum install java in RHEL < 10
-  yum: 
-    name: java-11-openjdk
+- name: Yum install java
+  package:
+    name: "{{ hadoop_java_package_redhat }}"
     state: present
-  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version | int < 10"
-
-- name: Yum install java in RHEL >= 10
-  yum:
-    name: java-21-openjdk
-    state: present
-  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version | int >= 10"
+  when: "ansible_os_family == 'RedHat'"
 
 - name: Install requisites
   package: 
@@ -76,18 +61,15 @@
 - name: "Create /opt/hadoop dir"
   file: dest=/opt/hadoop src={{ hadoop_home }} state=link
 
-- name: Set JAVA_HOME in hadoop-env.sh in RH
-  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre"
-  when: "ansible_os_family == 'RedHat'"
+- name: Find installed Java home
+  shell: dirname "$(dirname "$(readlink -f "$(command -v java)")")"
+  args:
+    executable: /bin/sh
+  register: hadoop_java_home
+  changed_when: false
 
-- name: Search for java installation
-  find:
-    paths: /usr/lib/jvm
-    patterns: "java-*-openjdk-amd64"
-    file_type: directory
-  register: java_found
-  when: "ansible_os_family == 'Debian'"
-
-- name: Set JAVA_HOME in hadoop-env.sh Deb
-  lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME={{ java_found.files[0].path if java_found.matched > 0 else '/usr/lib/jvm/default-java' }}"
-  when: "ansible_os_family == 'Debian'"
+- name: Set JAVA_HOME in hadoop-env.sh
+  lineinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
+    regexp: '^export JAVA_HOME='
+    line: "export JAVA_HOME={{ hadoop_java_home.stdout }}"

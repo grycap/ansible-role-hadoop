@@ -6,6 +6,12 @@ hadoop_home: /opt/hadoop-2.X
 hadoop_mirrors: [ "https://dlcdn.apache.org/hadoop/common/stable/", "http://apache.rediris.es/hadoop/core/stable/", "http://apache.uvigo.es/hadoop/common/stable/" ]
 # Hadoop version to install: latest or version num
 hadoop_version: latest
+# Java runtime required by current Hadoop releases (class file version 61 = Java 17).
+hadoop_java_version: 17
+# Rocky/RHEL 10 provides OpenJDK 21 in its default repositories; Java 17
+# packages are not available there. Override the package variables as needed.
+hadoop_java_package_debian: "openjdk-{{ hadoop_java_version }}-jre"
+hadoop_java_package_redhat: "java-{{ '21' if ansible_distribution_major_version | int >= 10 else hadoop_java_version }}-openjdk"
 # A dictionary with a set of properties to set in the hdfs-site.xml
 hdfs_props: {}
 # A dictionary with a set of properties to set in the yarn-site.xml
